@@ -77,117 +77,132 @@ if not st.session_state.authenticated:
     [data-testid="stAppViewContainer"] { background: #f4f5f7; }
     [data-testid="stHeader"] { background: transparent; }
 
+# --- TELA DE LOGIN ---
+if not st.session_state.authenticated:
+    st.set_page_config(page_title="DB Sentinel | Login", page_icon="🛡️", layout="wide")
+
+    st.markdown("""
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+    
+    body, .stApp { background: #f0f0f0 !important; color: #000000 !important; font-family: 'Inter', sans-serif; }
+    [data-testid="stAppViewContainer"] { background: #f0f0f0; }
+    [data-testid="stHeader"] { background: transparent; }
+
     /* Centralizar conteúdo verticalmente */
     .stMainBlockContainer {
         display: flex;
         flex-direction: column;
         justify-content: center;
-        min-height: 80vh;
-        padding-top: 60px !important;
+        min-height: 100vh;
+        padding-top: 0 !important;
     }
 
     /* Branding Section */
     .branding-container {
         text-align: center;
-        padding: 0 40px;
+        padding-right: 40px;
     }
     .logo-emoji {
-        font-size: 150px;
-        filter: drop-shadow(0 20px 30px rgba(88, 80, 236, 0.15));
-        margin-bottom: 20px;
+        font-size: 160px;
+        margin-bottom: 30px;
     }
     .main-title {
-        font-size: 48px; font-weight: 900;
-        color: #111827; letter-spacing: -0.02em;
+        font-family: 'Inter', sans-serif;
+        font-size: 52px; font-weight: 800;
+        color: #1a1a2e; letter-spacing: -0.025em;
         line-height: 1;
-        margin-bottom: 12px;
+        margin-bottom: 20px;
+        text-transform: uppercase;
     }
     .sub-title {
         color: #4b5563; font-size: 16px; font-weight: 600;
         letter-spacing: 0.1em; text-transform: uppercase;
     }
 
-    /* Login Header */
-    .login-header {
-        font-size: 24px; font-weight: 700;
-        color: #111827; margin-bottom: 30px;
-        font-family: 'Inter', sans-serif;
-    }
-
-    /* Style for the Streamlit Form to be the Card */
+    /* Login Card Section */
     [data-testid="stForm"] {
         background: #ffffff !important;
-        padding: 40px !important;
-        border-radius: 12px !important;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.05) !important;
-        border: 1px solid #e5e7eb !important;
-        max-width: 420px;
+        padding: 50px !important;
+        border-radius: 10px !important;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.08) !important;
+        border: none !important;
+        max-width: 440px;
         margin: 0 auto;
     }
 
-    /* Standardization of Inputs (Email vs Password) */
-    .stTextInput > div > div > input {
-        background: #ffffff !important;
-        border: 1px solid #d1d5db !important;
-        color: #111827 !important;
-        border-radius: 6px !important;
-        padding: 12px !important;
-        font-size: 14px !important;
-        height: 44px !important;
+    .login-header {
+        font-size: 28px; font-weight: 700;
+        color: #111827; margin-bottom: 40px;
+        font-family: 'Inter', sans-serif;
     }
 
-    /* Special Fix for Password input to maintain alignment with email input */
+    /* Input Styling to match mockup */
+    .stTextInput label {
+        font-family: 'Inter', sans-serif !important;
+        font-weight: 600 !important;
+        color: #4b5563 !important;
+        font-size: 13px !important;
+        margin-bottom: 12px !important;
+        text-transform: uppercase;
+    }
+
+    .stTextInput > div > div > input {
+        background: #ffffff !important;
+        border: 1px solid #e5e7eb !important;
+        color: #000000 !important;
+        border-radius: 6px !important;
+        padding: 14px !important;
+        font-size: 14px !important;
+        height: 48px !important;
+    }
+    
     .stTextInput > div > div {
         background: transparent !important;
         border: none !important;
     }
 
-    .stTextInput label {
-        font-family: 'Inter', sans-serif !important;
-        font-weight: 600 !important;
-        color: #374151 !important;
-        font-size: 13px !important;
-        margin-bottom: 8px !important;
-    }
-
-    /* Button Styling */
+    /* Button Styling (Purple) */
     .stButton > button {
         width: 100%;
-        background: #5850ec !important;
+        background: #5843e0 !important;
         color: #ffffff !important;
         font-family: 'Inter', sans-serif !important;
         font-weight: 600 !important;
-        padding: 12px !important;
+        padding: 14px !important;
         border-radius: 6px !important;
         border: none !important;
-        margin-top: 10px !important;
-        height: 46px !important;
+        margin-top: 20px !important;
+        height: 50px !important;
+        text-transform: uppercase;
+        font-size: 13px !important;
+        letter-spacing: 0.05em !important;
     }
-    .stButton > button:hover { background: #4338ca !important; }
+    .stButton > button:hover { background: #4736b4 !important; }
 
-    /* Footer link styling */
+    /* Links */
     .reset-trigger-button button {
         background: none !important;
         border: none !important;
-        color: #5850ec !important;
-        font-size: 14px !important;
+        color: #5880ec !important; /* Blue-ish purple as in print */
+        font-size: 15px !important;
         font-weight: 500 !important;
         padding: 0 !important;
-        margin-top: 20px !important;
+        margin-top: 30px !important;
         box-shadow: none !important;
         text-decoration: none !important;
     }
     .reset-trigger-button button:hover { text-decoration: underline !important; }
 
     .link-footer {
-        text-align: center; margin-top: 40px;
+        text-align: center; margin-top: 50px;
         color: #9ca3af; font-size: 12px;
     }
     </style>
     """, unsafe_allow_html=True)
 
-    # Layout Principal em Colunas (Restaurando v1.1)
-    col_l, col_brand, col_gap, col_login, col_r = st.columns([1, 4, 1, 4, 1])
+    # Layout Principal em Colunas com razão mais próxima ao print
+    col_l, col_brand, col_gap, col_login, col_r = st.columns([2, 5, 1, 5, 2])
 
     with col_brand:
         st.markdown("""
@@ -200,7 +215,7 @@ if not st.session_state.authenticated:
 
     with col_login:
         if st.session_state.reset_mode:
-            st.markdown('<div class="login-header">REDEFINIR SENHA</div>', unsafe_allow_html=True)
+            st.markdown('<div class="login-header">Redefinir Senha</div>', unsafe_allow_html=True)
             with st.form("reset_form"):
                 reset_email = st.text_input("E-MAIL")
                 submitted = st.form_submit_button("SOLICITAR NOVA SENHA")
@@ -209,8 +224,7 @@ if not st.session_state.authenticated:
                         send_reset_email(reset_email)
                     else: st.warning("Informe o e-mail.")
             
-            # Botão de voltar estilizado
-            st.markdown('<div class="reset-trigger-button">', unsafe_allow_html=True)
+            st.markdown('<div class="reset-trigger-button" style="text-align:center;">', unsafe_allow_html=True)
             if st.button("Voltar ao Login"):
                 st.session_state.reset_mode = False
                 st.rerun()
@@ -230,14 +244,15 @@ if not st.session_state.authenticated:
                     else:
                         st.error("Credenciais inválidas.")
 
-            # Link de esqueci senha estilizado como botão de texto
-            st.markdown('<div class="reset-trigger-button">', unsafe_allow_html=True)
-            if st.button("Esqueci minha senha"):
+            st.markdown('<div class="reset-trigger-button" style="text-align:center;">', unsafe_allow_html=True)
+            if st.button("Redefinir Senha"):
                 st.session_state.reset_mode = True
                 st.rerun()
             st.markdown('</div>', unsafe_allow_html=True)
         
         st.markdown('<div class="link-footer">── development by helyo tools ──</div>', unsafe_allow_html=True)
+
+    st.stop()
 
     st.stop()
 
