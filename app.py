@@ -58,123 +58,174 @@ def send_reset_email(target_email):
 
 # --- TELA DE LOGIN ---
 if not st.session_state.authenticated:
-    st.set_page_config(page_title="DB Sentinel | Login", page_icon="🛡️", layout="centered")
+    st.set_page_config(page_title="DB Sentinel | Login", page_icon="🛡️", layout="wide")
 
     st.markdown("""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Share+Tech+Mono&display=swap');
-    body, .stApp { background: #020408 !important; }
-    .stApp { background: #020408 !important; }
-    [data-testid="stAppViewContainer"] { background: #020408; }
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
+    
+    body, .stApp { background: #f4f5f7 !important; color: #1f2937 !important; }
+    .stApp { background: #f4f5f7 !important; }
+    [data-testid="stAppViewContainer"] { background: #f4f5f7; }
     [data-testid="stHeader"] { background: transparent; }
 
-    .login-container {
-        max-width: 420px; margin: 60px auto; padding: 40px;
-        background: rgba(0,255,195,0.03);
-        border: 1px solid rgba(0,255,195,0.15);
-        border-radius: 16px;
-        backdrop-filter: blur(12px);
+    .main-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 80vh;
+        gap: 80px;
+        padding: 40px;
     }
-    .sentinel-title {
-        font-family: 'Orbitron', monospace;
-        font-size: 28px; font-weight: 900;
-        color: #00ffc3;
+
+    .branding-section {
         text-align: center;
-        text-shadow: 0 0 20px #00ffc355, 0 0 60px #00ffc322;
-        letter-spacing: .1em;
-        animation: glow 3s ease-in-out infinite;
+        max-width: 400px;
     }
-    .sentinel-sub {
-        font-family: 'Share Tech Mono', monospace;
-        color: rgba(0,255,195,0.4);
-        text-align: center;
-        font-size: 11px;
-        letter-spacing: .2em;
-        margin-top: 6px;
+
+    .logo-shield {
+        font-size: 160px;
+        filter: drop-shadow(0 20px 30px rgba(88, 80, 236, 0.2));
+        margin-bottom: 20px;
+    }
+
+    .brand-title {
+        font-family: 'Inter', sans-serif;
+        font-size: 48px; font-weight: 900;
+        color: #111827;
+        letter-spacing: -0.02em;
+        line-height: 1;
+        margin-bottom: 12px;
+    }
+
+    .brand-sub {
+        font-family: 'Inter', sans-serif;
+        color: #4b5563;
+        font-size: 16px;
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+    }
+
+    .login-card {
+        background: #ffffff;
+        padding: 48px;
+        border-radius: 12px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        width: 100%;
+        max-width: 420px;
+    }
+
+    .form-title {
+        font-family: 'Inter', sans-serif;
+        font-size: 24px; font-weight: 700;
+        color: #111827;
         margin-bottom: 32px;
+        letter-spacing: -0.01em;
     }
-    .helyo-footer {
-        font-family: 'Share Tech Mono', monospace;
-        color: rgba(0,255,195,0.25);
-        text-align: center;
-        font-size: 10px;
-        letter-spacing: .2em;
-        margin-top: 28px;
+
+    /* Streamlit Input Styling */
+    .stTextInput label {
+        font-family: 'Inter', sans-serif !important;
+        font-weight: 600 !important;
+        color: #374151 !important;
+        font-size: 13px !important;
+        margin-bottom: 8px !important;
     }
-    @keyframes glow {
-        0%,100%{ text-shadow: 0 0 10px #00ffc355, 0 0 30px #00ffc322; }
-        50%{ text-shadow: 0 0 25px #00ffc388, 0 0 60px #00ffc344; }
-    }
+
     .stTextInput > div > div > input {
-        background: #030810 !important;
-        border: 1px solid rgba(0,255,195,0.2) !important;
-        color: #00ffc3 !important;
-        font-family: 'Share Tech Mono', monospace !important;
-        border-radius: 8px !important;
-        letter-spacing: .05em;
+        background: #ffffff !important;
+        border: 1px solid #d1d5db !important;
+        color: #111827 !important;
+        border-radius: 6px !important;
+        padding: 12px !important;
     }
+
     .stTextInput > div > div > input:focus {
-        border-color: #00ffc3 !important;
-        box-shadow: 0 0 15px rgba(0,255,195,0.2) !important;
+        border-color: #5850ec !important;
+        box-shadow: 0 0 0 2px rgba(88, 80, 236, 0.1) !important;
     }
-    .stTextInput label { color: rgba(0,255,195,0.5) !important; font-family: 'Share Tech Mono', monospace !important; font-size: 11px !important; letter-spacing: .15em; }
+
     .stButton > button {
-        width: 100%; background: linear-gradient(135deg, #00ffc3, #00d4a8) !important;
-        color: #020408 !important; font-family: 'Orbitron', monospace !important;
-        font-weight: 700 !important; font-size: 13px !important;
-        letter-spacing: .15em !important; border: none !important;
-        border-radius: 10px !important; padding: 14px !important;
-        box-shadow: 0 0 20px rgba(0,255,195,0.3) !important;
-        transition: all 0.3s !important;
+        width: 100%;
+        background: #5850ec !important;
+        color: #ffffff !important;
+        font-family: 'Inter', sans-serif !important;
+        font-weight: 600 !important;
+        padding: 12px !important;
+        border-radius: 6px !important;
+        border: none !important;
+        margin-top: 10px !important;
+        transition: background 0.2s;
     }
-    .stButton > button:hover { box-shadow: 0 0 40px rgba(0,255,195,0.5) !important; transform: translateY(-1px); }
+
+    .stButton > button:hover {
+        background: #4338ca !important;
+    }
+
+    .reset-link-btn {
+        background: none !important;
+        border: none !important;
+        color: #5850ec !important;
+        text-decoration: none !important;
+        font-family: 'Inter', sans-serif !important;
+        font-size: 14px !important;
+        font-weight: 500 !important;
+        box-shadow: none !important;
+        margin: 0 auto !important;
+        display: block !important;
+    }
+    .reset-link-btn:hover { text-decoration: underline !important; }
     </style>
 
-    <div class="login-container">
-        <div style="text-align:center; font-size:60px; margin-bottom:12px;">🛡️</div>
-        <div class="sentinel-title">DB SENTINEL</div>
-        <div class="sentinel-sub">SECURE ACCESS TERMINAL</div>
-    </div>
+    <div class="main-container">
+        <!-- Logo Section -->
+        <div class="branding-section">
+            <div class="logo-shield">🛡️</div>
+            <div class="brand-title">DB SENTINEL</div>
+            <div class="brand-sub">SECURE ACCESS TERMINAL</div>
+        </div>
+
+        <!-- Form Section -->
+        <div class="login-card">
+            <div class="form-title">LOGIN</div>
     """, unsafe_allow_html=True)
 
-    with st.form("login_form"):
-        email    = st.text_input("E-MAIL", placeholder="seu@email.com")
-        password = st.text_input("SENHA", type="password", placeholder="••••••")
-        submit   = st.form_submit_button("ACESSAR SISTEMA")
-
-        if submit:
-            if email == "caike@helyo.com.br" and password == "142536":
-                st.session_state.authenticated = True
-                st.session_state.show_splash   = True
-                st.rerun()
-            else:
-                st.error("⚠ Credenciais inválidas. Verifique e-mail e senha.")
-    
-    # Botão Esqueci Senha fora do formulário de login
-    if not st.session_state.reset_mode:
-        if st.button("ESQUECI MINHA SENHA", type="secondary"):
-            st.session_state.reset_mode = True
-            st.rerun()
-    
-    # --- FLUXO DE RESET ---
     if st.session_state.reset_mode:
-        st.markdown('<div class="sentinel-sub">RESET DE SENHA</div>', unsafe_allow_html=True)
+        st.markdown(' <div style="margin-top:-20px; margin-bottom:20px; color:#6b7280; font-size:14px;">Redefinir sua senha com e-mail</div>', unsafe_allow_html=True)
         with st.form("reset_form"):
-            reset_email = st.text_input("E-MAIL PARA RECUPERAÇÃO")
+            reset_email = st.text_input("E-MAIL")
             if st.form_submit_button("SOLICITAR NOVA SENHA"):
                 if reset_email:
                     if send_reset_email(reset_email):
-                        st.success("✅ Link de recuperação enviado para seu e-mail!")
+                        st.success("✅ Link enviado!")
                     else:
-                        st.error("❌ Erro ao enviar link. Tente novamente.")
-                else:
-                    st.warning("Preencha o e-mail.")
+                        st.error("❌ Erro no envio.")
+                else: st.warning("Preencha o e-mail.")
         
         if st.button("VOLTAR AO LOGIN"):
             st.session_state.reset_mode = False
             st.rerun()
+    else:
+        with st.form("login_form"):
+            email    = st.text_input("E-MAIL", placeholder="seu@email.com")
+            password = st.text_input("SENHA", type="password", placeholder="******")
+            submit   = st.form_submit_button("ACESSAR SISTEMA")
 
-    st.markdown('<div class="helyo-footer">── development by helyo tools ──</div>', unsafe_allow_html=True)
+            if submit:
+                if email == "caike@helyo.com.br" and password == "142536":
+                    st.session_state.authenticated = True
+                    st.session_state.show_splash   = True
+                    st.rerun()
+                else:
+                    st.error("⚠ Credenciais inválidas.")
+
+        if st.button("Redefinir Senha"):
+            st.session_state.reset_mode = True
+            st.rerun()
+
+    st.markdown('</div></div>', unsafe_allow_html=True)
+    st.markdown('<div style="text-align:center; color:#9ca3af; font-size:12px; margin-top:20px;">── development by helyo tools ──</div>', unsafe_allow_html=True)
     st.stop()
 
 # --- TELA SPLASH / HOME ---
