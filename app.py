@@ -225,7 +225,7 @@ if not st.session_state.authenticated:
                 login_submit = st.form_submit_button("ACESSAR SISTEMA")
                 
                 if login_submit:
-                    if email == "caike@helyo.com.br" and password == "142536":
+                    if email == "caike@helyo.com.br" and password == "123456":
                         st.session_state.authenticated = True
                         st.session_state.show_splash = True
                         st.rerun()
