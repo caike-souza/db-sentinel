@@ -364,7 +364,7 @@ footer { visibility:hidden; }
 # --- CONEXÃO ---
 @st.cache_resource
 def get_db_connection():
-    return psycopg2.connect(host=SUPABASE_HOST, database=DB_NAME, user=DB_USER, password=DB_PASS, port="5432", connect_timeout=10)
+    return psycopg2.connect(host=SUPABASE_HOST, database=DB_NAME, user=DB_USER, password=DB_PASS, port="6543", connect_timeout=10)
 
 def fetch_metrics():
     try:
