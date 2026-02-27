@@ -148,57 +148,148 @@ if not st.session_state.authenticated:
     </style>
     """, unsafe_allow_html=True)
 
-    # Layout Principal usando st.columns
-    empty_l, col_brand, col_gap, col_login, empty_r = st.columns([1, 4, 1, 4, 1])
+# --- TELA DE LOGIN ---
+if not st.session_state.authenticated:
+    st.set_page_config(page_title="DB Sentinel | Login", page_icon="🛡️", layout="wide")
 
-    with col_brand:
-        st.markdown(f"""
-        <div class="branding-container">
-            <div class="logo-emoji">🛡️</div>
-            <div class="main-title">DB SENTINEL</div>
-            <div class="sub-title">SECURE ACCESS TERMINAL</div>
-        </div>
-        """, unsafe_allow_html=True)
+    st.markdown("""
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
+    
+    body, .stApp { background: #f4f5f7 !important; color: #1f2937 !important; font-family: 'Inter', sans-serif; }
+    [data-testid="stAppViewContainer"] { background: #f4f5f7; }
+    [data-testid="stHeader"] { background: transparent; }
 
-    with col_login:
-        st.markdown('<div class="login-card-inner">', unsafe_allow_html=True)
+    /* Centralizar conteúdo */
+    .stMainBlockContainer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 90vh;
+        padding-top: 20px !important;
+    }
+
+    /* Branding Section */
+    .branding-container {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    .logo-emoji {
+        font-size: 140px;
+        filter: drop-shadow(0 10px 20px rgba(88, 80, 236, 0.2));
+        margin-bottom: 10px;
+    }
+    .main-title {
+        font-size: 42px; font-weight: 900;
+        color: #111827; letter-spacing: -0.02em;
+        line-height: 1.1;
+    }
+    .sub-title {
+        color: #4b5563; font-size: 13px; font-weight: 600;
+        letter-spacing: 0.15em; text-transform: uppercase;
+        margin-top: 5px;
+    }
+
+    /* Login Card Section */
+    .login-card-inner {
+        background: #ffffff;
+        padding: 40px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+        max-width: 440px;
+        margin: 0 auto;
+        border: 1px solid #e5e7eb;
+    }
+    .login-header {
+        font-size: 22px; font-weight: 800;
+        color: #111827; margin-bottom: 20px;
+    }
+
+    /* Standardization of Inputs */
+    .stTextInput > div > div > input {
+        border-radius: 8px !important;
+        padding: 12px 16px !important;
+        border: 1px solid #d1d5db !important;
+        background-color: #f9fafb !important;
+        font-size: 14px !important;
+    }
+    
+    /* Remove streamlit's default focus ring and eye icon container padding */
+    .stTextInput > div > div {
+        border: none !important;
+        background-color: transparent !important;
+    }
+    
+    .stTextInput label { font-size: 11px !important; font-weight: 700 !important; color: #4b5563 !important; text-transform: uppercase; }
+
+    /* Button Styling */
+    .stButton > button {
+        width: 100%;
+        height: 48px;
+        background: #5850ec !important;
+        color: white !important;
+        border-radius: 8px !important;
+        font-weight: 700 !important;
+        font-size: 14px !important;
+        border: none !important;
+        margin-top: 10px !important;
+    }
+    .stButton > button:hover { background: #4338ca !important; }
+
+    .link-footer {
+        text-align: center; margin-top: 30px;
+        color: #9ca3af; font-size: 11px;
+        letter-spacing: 0.05em;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+    # Layout Principal Limpo
+    st.markdown('<div class="branding-container">', unsafe_allow_html=True)
+    st.markdown('<div class="logo-emoji">🛡️</div>', unsafe_allow_html=True)
+    st.markdown('<div class="main-title">DB SENTINEL</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sub-title">SECURE ACCESS TERMINAL</div>', unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
+
+    st.markdown('<div class="login-card-inner">', unsafe_allow_html=True)
+    
+    if st.session_state.reset_mode:
+        st.markdown('<div class="login-header">REDEFINIR SENHA</div>', unsafe_allow_html=True)
+        st.markdown('<p style="font-size:13px; color:#6b7280; margin-top:-10px; margin-bottom:20px;">Informe seu e-mail para receber o link</p>', unsafe_allow_html=True)
+        with st.form("reset_form"):
+            reset_email = st.text_input("E-MAIL")
+            submitted = st.form_submit_button("SOLICITAR NOVA SENHA")
+            if submitted:
+                if reset_email:
+                    send_reset_email(reset_email)
+                else: st.warning("Informe o e-mail.")
+        
+        if st.button("Voltar ao Login", type="secondary"):
+            st.session_state.reset_mode = False
+            st.rerun()
+    else:
         st.markdown('<div class="login-header">LOGIN</div>', unsafe_allow_html=True)
-        
-        if st.session_state.reset_mode:
-            st.markdown('<p style="font-size:14px; color:#6b7280;">Redefinir senha via e-mail</p>', unsafe_allow_html=True)
-            with st.form("reset_form"):
-                reset_email = st.text_input("E-MAIL")
-                submitted = st.form_submit_button("SOLICITAR NOVA SENHA")
-                if submitted:
-                    if reset_email:
-                        if send_reset_email(reset_email):
-                            st.success("✅ E-mail enviado!")
-                        # Erro já é exibido na função send_reset_email
-                    else: st.warning("Informe o e-mail.")
+        with st.form("login_form"):
+            email = st.text_input("E-MAIL", placeholder="seu@email.com")
+            password = st.text_input("SENHA", type="password", placeholder="******")
+            login_submit = st.form_submit_button("ACESSAR SISTEMA")
             
-            if st.button("Voltar ao Login"):
-                st.session_state.reset_mode = False
-                st.rerun()
-        else:
-            with st.form("login_form"):
-                email = st.text_input("E-MAIL", placeholder="seu@email.com")
-                password = st.text_input("SENHA", type="password", placeholder="******")
-                login_submit = st.form_submit_button("ACESSAR SISTEMA")
-                
-                if login_submit:
-                    if email == "caike@helyo.com.br" and password == "142536":
-                        st.session_state.authenticated = True
-                        st.session_state.show_splash = True
-                        st.rerun()
-                    else:
-                        st.error("Credenciais inválidas.")
+            if login_submit:
+                if email == "caike@helyo.com.br" and password == "142536":
+                    st.session_state.authenticated = True
+                    st.session_state.show_splash = True
+                    st.rerun()
+                else:
+                    st.error("Credenciais inválidas.")
 
-            if st.button("Esqueci minha senha", key="btn_reset", type="secondary"):
-                st.session_state.reset_mode = True
-                st.rerun()
-        
-        st.markdown('</div>', unsafe_allow_html=True)
-        st.markdown('<div class="link-footer">── development by helyo tools ──</div>', unsafe_allow_html=True)
+        if st.button("Esqueci minha senha", key="btn_reset", type="secondary"):
+            st.session_state.reset_mode = True
+            st.rerun()
+    
+    st.markdown('</div>', unsafe_allow_html=True)
+    st.markdown('<div class="link-footer">── development by helyo tools ──</div>', unsafe_allow_html=True)
+
+    st.stop()
 
     st.stop()
 
