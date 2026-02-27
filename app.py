@@ -5,6 +5,11 @@ from psycopg2.extras import RealDictCursor
 import google.generativeai as genai
 import plotly.express as px
 import time
+import smtplib
+import hashlib
+import hmac
+from email.mime.text import MIMEText
+from email.message import EmailMessage
 
 # --- CREDENCIAIS (Configuradas via Streamlit Secrets) ---
 SUPABASE_HOST = st.secrets["SUPABASE_HOST"]
@@ -21,6 +26,35 @@ if "authenticated" not in st.session_state:
     st.session_state.authenticated = False
 if "show_splash" not in st.session_state:
     st.session_state.show_splash = False
+if "reset_mode" not in st.session_state:
+    st.session_state.reset_mode = False
+
+# --- FUNÇÃO DE ENVIO DE E-MAIL ---
+def send_reset_email(target_email):
+    try:
+        smtp_server = st.secrets["SMTP_SERVER"]
+        smtp_port   = st.secrets["SMTP_PORT"]
+        smtp_user   = st.secrets["SMTP_USER"]
+        smtp_pass   = st.secrets["SMTP_PASS"]
+        
+        # Gera um token simples (Hash do email + segredo)
+        secret = st.secrets["DB_PASS"]
+        token = hmac.new(secret.encode(), target_email.encode(), hashlib.sha256).hexdigest()
+        reset_link = f"https://caike-souza-db-sentinel.streamlit.app/?token={token}&email={target_email}"
+        
+        msg = EmailMessage()
+        msg.set_content(f"Olá,\n\nRecebemos uma solicitação de redefinição de senha para sua conta no DB Sentinel.\n\nClique no link abaixo para criar uma nova senha:\n{reset_link}\n\nSe você não solicitou isso, ignore este e-mail.")
+        msg['Subject'] = "DB Sentinel | Redefinição de Senha"
+        msg['From'] = smtp_user
+        msg['To'] = target_email
+        
+        with smtplib.SMTP_SSL(smtp_server, smtp_port) as server:
+            server.login(smtp_user, smtp_pass)
+            server.send_message(msg)
+        return True
+    except Exception as e:
+        st.error(f"Erro ao enviar e-mail: {e}")
+        return False
 
 # --- TELA DE LOGIN ---
 if not st.session_state.authenticated:
@@ -115,6 +149,30 @@ if not st.session_state.authenticated:
                 st.rerun()
             else:
                 st.error("⚠ Credenciais inválidas. Verifique e-mail e senha.")
+    
+    # Botão Esqueci Senha fora do formulário de login
+    if not st.session_state.reset_mode:
+        if st.button("ESQUECI MINHA SENHA", type="secondary"):
+            st.session_state.reset_mode = True
+            st.rerun()
+    
+    # --- FLUXO DE RESET ---
+    if st.session_state.reset_mode:
+        st.markdown('<div class="sentinel-sub">RESET DE SENHA</div>', unsafe_allow_html=True)
+        with st.form("reset_form"):
+            reset_email = st.text_input("E-MAIL PARA RECUPERAÇÃO")
+            if st.form_submit_button("SOLICITAR NOVA SENHA"):
+                if reset_email:
+                    if send_reset_email(reset_email):
+                        st.success("✅ Link de recuperação enviado para seu e-mail!")
+                    else:
+                        st.error("❌ Erro ao enviar link. Tente novamente.")
+                else:
+                    st.warning("Preencha o e-mail.")
+        
+        if st.button("VOLTAR AO LOGIN"):
+            st.session_state.reset_mode = False
+            st.rerun()
 
     st.markdown('<div class="helyo-footer">── development by helyo tools ──</div>', unsafe_allow_html=True)
     st.stop()
