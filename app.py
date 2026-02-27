@@ -71,18 +71,6 @@ if not st.session_state.authenticated:
 
     st.markdown("""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
-    
-    body, .stApp { background: #f4f5f7 !important; color: #1f2937 !important; font-family: 'Inter', sans-serif; }
-    [data-testid="stAppViewContainer"] { background: #f4f5f7; }
-    [data-testid="stHeader"] { background: transparent; }
-
-# --- TELA DE LOGIN ---
-if not st.session_state.authenticated:
-    st.set_page_config(page_title="DB Sentinel | Login", page_icon="🛡️", layout="wide")
-
-    st.markdown("""
-    <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
     
     body, .stApp { background: #f0f0f0 !important; color: #000000 !important; font-family: 'Inter', sans-serif; }
@@ -251,8 +239,6 @@ if not st.session_state.authenticated:
             st.markdown('</div>', unsafe_allow_html=True)
         
         st.markdown('<div class="link-footer">── development by helyo tools ──</div>', unsafe_allow_html=True)
-
-    st.stop()
 
     st.stop()
 
